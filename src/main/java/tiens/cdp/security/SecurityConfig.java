@@ -18,20 +18,21 @@ import java.util.Objects;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * 验证则优先进入
+     * ResourceServerConfigurerAdapter进行token验证。而不会进行 WebSecurityConfigurerAdapter 的 basic auth或表单认证。
+     * WebSecurityConfigurerAdapter是默认情况下spring security的http配置
+     * ResourceServerConfigurerAdapter是默认情况下spring security oauth2的http配置
+     * 此项目，API服务，所以不配置此处验证规则
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/oauth/token").permitAll()
-                .antMatchers("/user/*")
-                .authenticated()
-
-                .anyRequest()
-                .permitAll()
-                .and()
-                .httpBasic()
-                .and()
-                //关闭跨站请求防护
-                .csrf().disable();
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/login").permitAll()
+//                .antMatchers("/hq").hasRole("USER1")
+//                .anyRequest()
+//                .authenticated();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         auth.inMemoryAuthentication().passwordEncoder(encoder)
                 .withUser("admin")
-                .password(encoder.encode("admin")).roles("USER");
+                .password(encoder.encode("admin")).roles("USER1");
     }
 
     @Override

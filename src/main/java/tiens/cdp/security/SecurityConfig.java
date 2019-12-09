@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.provider.request.DefaultOAuth2Request
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.util.DigestUtils;
+import tiens.cdp.service.CdpUserDetailService;
 
 import java.util.Objects;
 
@@ -26,6 +27,8 @@ import java.util.Objects;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private CdpUserDetailService userDetailService;
     /**
      * 验证则优先进入
      * ResourceServerConfigurerAdapter进行token验证。而不会进行 WebSecurityConfigurerAdapter 的 basic auth或表单认证。
@@ -46,10 +49,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        auth.inMemoryAuthentication().passwordEncoder(encoder)
+//                .withUser("admin")
+//                .password(encoder.encode("admin")).roles("USER1");
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        auth.inMemoryAuthentication().passwordEncoder(encoder)
-                .withUser("admin")
-                .password(encoder.encode("admin")).roles("USER1");
+
+        auth.userDetailsService(userDetailService).passwordEncoder(encoder);
     }
 
     @Override

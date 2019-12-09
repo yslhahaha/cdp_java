@@ -24,6 +24,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
                 .csrf().disable()//禁用了 csrf 功能
                 .authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/valcode").permitAll()
                 .antMatchers("/hq").hasRole("USER1")
                 .anyRequest()
                 .authenticated();

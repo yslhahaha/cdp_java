@@ -3,6 +3,7 @@ package tiens.cdp.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.provider.error.WebResponseExceptionTr
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
 
@@ -30,38 +32,22 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    /**
-     * 注入userDetailsService，开启refresh_token需要用到
-     */
-    //@Autowired
-    //private MyUserDetailsService userDetailsService;
-
-    /**
-     * 数据源
-     */
-//    @Autowired
-//    private DataSource dataSource;
-
-    /**
-     * 设置保存token的方式，一共有五种，这里采用数据库的方式
-     */
-    //@Autowired
-    //private TokenStore tokenStore;
-
-//    @Autowired
-//    private WebResponseExceptionTranslator webResponseExceptionTranslator;
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Bean
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new RedisTokenStore(redisConnectionFactory);
+        //return new InMemoryTokenStore();
     }
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-//        security.passwordEncoder(passwordEncoder())
-//                .checkTokenAccess("permitAll()")
-//                .allowFormAuthenticationForClients();//支持把secret和clientid写在url上，否则需要在头上
-        super.configure(security);
+        security
+                .allowFormAuthenticationForClients()//支持把secret和clientid写在url上，否则需要在头上
+                .tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()");
+        //super.configure(security);
     }
 
     @Override
@@ -76,7 +62,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager);
-
     }
 
     /**

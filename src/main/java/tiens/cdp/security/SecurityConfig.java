@@ -27,8 +27,15 @@ import java.util.Objects;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+//    @Autowired
+//    private CdpUserDetailService userDetailService;
+    private final CdpUserDetailService userDetailService;
+
     @Autowired
-    private CdpUserDetailService userDetailService;
+    public SecurityConfig(CdpUserDetailService userDetailService){
+        this.userDetailService = userDetailService;
+    }
+
     /**
      * 验证则优先进入
      * ResourceServerConfigurerAdapter进行token验证。而不会进行 WebSecurityConfigurerAdapter 的 basic auth或表单认证。

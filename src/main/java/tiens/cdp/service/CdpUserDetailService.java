@@ -1,5 +1,6 @@
 package tiens.cdp.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -7,18 +8,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import tiens.cdp.dao.UserMapper;
+import tiens.cdp.model.CdpUser;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 public class CdpUserDetailService implements UserDetailsService {
+
+    @Autowired
+    private UserMapper userMapper;
+
+
+//    public CdpUserDetailService(UserMapper userMapper){
+//        this.userMapper = userMapper;
+//    }
+
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 //        PUser user = userDao.findByMemberName(userName);
 //        if (user == null) {
 //            throw new UsernameNotFoundException(userName);
 //        }
+        CdpUser user1 = userMapper.findByUsername(userName);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         // 可用性 :true:可用 false:不可用
         boolean enabled = true;

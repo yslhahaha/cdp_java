@@ -15,3 +15,18 @@ spring:
         max-idle: 8
         # 最小空闲连接数 默认0
         min-idle: 0
+  # datasource
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver # JDBC连接Mysql6以上com.mysql.cj.jdbc.Driver
+    url: jdbc:oracle:thin:@localhost:1521/orcl.1.186.138
+    username: dpsuser
+    password: 123456
+#mybatis
+mybatis:
+  # 映射文件的路径 ，支持 Ant 风格的通配符， 多个配置可以使用英文逗号隔开
+  mapper-locations: classpath:mapper/*.xml
+  # 类型别名包画配置，只能指定具体的包，多个配置可以使用英文逗号隔开
+  type-aliases-package: tiens.cdp.model
+  # Mybatis SQL语句控制台打印
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

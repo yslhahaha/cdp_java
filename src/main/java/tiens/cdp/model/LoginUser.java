@@ -1,17 +1,25 @@
 package tiens.cdp.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class CdpUser {
+public class LoginUser implements Serializable {
 
+    private String userid;
     private String username;
     private String password;
     private String cName;
-    private Date lastLoginDate;
+
+    private List<ApiUrl> apis;
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public String getUsername() {
         return username;
@@ -37,11 +45,11 @@ public class CdpUser {
         this.cName = cName;
     }
 
-    public Date getLastLoginDate() {
-        return lastLoginDate;
+    public List<ApiUrl> getApis() {
+        return apis;
     }
 
-    public void setLastLoginDate(Date lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
+    public void setApis(List<ApiUrl> apis) {
+        this.apis = apis;
     }
 }

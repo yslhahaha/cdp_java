@@ -4,15 +4,36 @@
 <!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->
 <mapper namespace="tiens.cdp.dao.UserMapper">
 
-    <resultMap id="UserResultMap" type="tiens.cdp.model.CdpUser" >
+    <resultMap id="UserResultMap" type="tiens.cdp.model.LoginUser" >
+        <result column="USER_ID" property="userid" jdbcType="VARCHAR" />
         <result column="USER_NAME" property="username" jdbcType="VARCHAR" />
         <result column="CN_NAME" property="cName" jdbcType="VARCHAR" />
         <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
-        <result column="LASTLOGINDATE" property="lastLoginDate" jdbcType="DATE" />
+    </resultMap>
+
+    <resultMap id="ApiUrlResultMap" type="tiens.cdp.model.ApiUrl" >
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="API_ID" property="apiId" jdbcType="VARCHAR" />
+        <result column="API_NAME" property="apiName" jdbcType="VARCHAR" />
+        <result column="API_PATH" property="apiUrl" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="findByUsername" resultMap="UserResultMap" parameterType="java.lang.String"> <!--   resultType可以不用写全，与application.yml中的type-aliases-package属性组合使用 -->
-        SELECT L.USER_NAME, L.CN_NAME, L.PASSWORD, L.LASTLOGINDATE FROM T_USERS L
+        SELECT L.USER_ID, L.USER_NAME, L.CN_NAME, L.PASSWORD FROM T_USERS L
         WHERE L.USER_NAME = #{userName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findApiUrlByUsername" resultMap="ApiUrlResultMap" parameterType="java.lang.String">
+        SELECT DISTINCT URP.USER_ID, A.API_ID, A.API_NAME, '/' || A.API_PATH API_PATH
+          FROM T_USER_ROLE_POWER URP
+          LEFT JOIN T_USERS U
+            ON URP.USER_ID = U.USER_ID
+          LEFT JOIN T_ROLES R
+            ON URP.ROLE_ID = R.ROLE_ID
+          LEFT JOIN T_ROLE_API RA
+            ON R.ROLE_ID = RA.ROLE_ID
+          LEFT JOIN T_APIS A
+            ON RA.API_ID = A.API_ID
+         WHERE U.USER_NAME = #{userName,jdbcType=VARCHAR}
     </select>
 </mapper>

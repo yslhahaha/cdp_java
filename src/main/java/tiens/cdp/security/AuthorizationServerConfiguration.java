@@ -37,8 +37,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Bean
     public TokenStore tokenStore() {
-        return new RedisTokenStore(redisConnectionFactory);
-        //return new InMemoryTokenStore();
+        //return new RedisTokenStore(redisConnectionFactory);
+        return new MyRedisTokenStore(redisConnectionFactory);
     }
 
     @Override
@@ -47,7 +47,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .allowFormAuthenticationForClients()//支持把secret和clientid写在url上，否则需要在头上
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
-        //super.configure(security);
     }
 
     @Override

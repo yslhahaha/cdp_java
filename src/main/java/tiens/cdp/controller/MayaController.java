@@ -14,4 +14,11 @@ public class MayaController {
 
         return "hq page!";
     }
+
+    @RequestMapping(value = "/sj", method = RequestMethod.POST)
+    public String query(@RequestBody String reqContent) {
+        System.out.println("reqContent:" + reqContent);
+
+        return "sj page!";
+    }
 }

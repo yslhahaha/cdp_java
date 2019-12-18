@@ -42,7 +42,7 @@ public class CdpUserDetailService implements UserDetailsService {
 
             for (ApiUrl api : cdpUser.getApis()) {
                 //角色必须是ROLE_开头，可以在数据库中设置
-                GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + api.getApiId());
+                GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(api.getApiId());
                 grantedAuthorities.add(grantedAuthority);
             }
 

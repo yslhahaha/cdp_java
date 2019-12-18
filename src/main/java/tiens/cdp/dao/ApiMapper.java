@@ -1,4 +1,9 @@
 package tiens.cdp.dao;
 
-public class ApiMapper {
+import tiens.cdp.model.ApiUrl;
+
+import java.util.List;
+
+public interface ApiMapper {
+    List<ApiUrl> findRoleApis();
 }

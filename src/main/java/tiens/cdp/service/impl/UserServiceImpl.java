@@ -12,8 +12,13 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
+
     private UserMapper userMapper;
+
+    @Autowired
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     public LoginUser findByUsername(String username) {
 

@@ -71,7 +71,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .secret(passwordEncoder.encode("secret"))
                 .autoApprove(true)   //test
                 .authorizedGrantTypes("authorization_code", "refresh_token", "password", "implicit")
-                .scopes("read", "write", "del", "userinfo");
+                .scopes("read", "write", "del", "userinfo")
+                .accessTokenValiditySeconds(30)
+                .refreshTokenValiditySeconds(300);
     }
 
     @Override

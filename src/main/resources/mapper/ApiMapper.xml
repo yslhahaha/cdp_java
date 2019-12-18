@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="tiens.model.ApiUrl">
-    <!--填写映射-->
+<mapper namespace="tiens.cdp.dao.ApiMapper">
+    <resultMap id="ApiUrlResultMap" type="tiens.cdp.model.ApiUrl" >
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="API_ID" property="apiId" jdbcType="VARCHAR" />
+        <result column="API_NAME" property="apiName" jdbcType="VARCHAR" />
+        <result column="API_PATH" property="apiUrl" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="findRoleApis" resultMap="ApiUrlResultMap">
+        SELECT '' USER_ID, L.API_ID, L.API_NAME, L.API_PATH
+          FROM T_APIS L
+         WHERE L.ENABLED = 1
+    </select>
 </mapper>

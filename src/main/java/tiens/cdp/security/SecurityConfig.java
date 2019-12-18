@@ -61,9 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .withUser("admin")
 //                .password(encoder.encode("admin")).roles("USER1");
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        auth.userDetailsService(userDetailService).passwordEncoder(encoder);
+        auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -72,4 +72,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence charSequence) {
+                return charSequence.toString();
+            }
+
+            @Override
+            public boolean matches(CharSequence charSequence, String s) {
+                return Objects.equals(charSequence.toString(),s);
+            }
+        };
+    }
 }

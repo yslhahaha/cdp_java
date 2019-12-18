@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import tiens.cdp.service.CdpUserDetailService;
 
 import javax.sql.DataSource;
 
@@ -35,6 +36,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
 
+    @Autowired
+    private CdpUserDetailService cdpUserDetailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Bean
     public TokenStore tokenStore() {
         //return new RedisTokenStore(redisConnectionFactory);
@@ -51,7 +58,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient("tonr").secret(passwordEncoder().encode("secret"))
+        clients.inMemory().withClient("tonr").secret(passwordEncoder.encode("secret"))
                 .autoApprove(true)   //test
                 .authorizedGrantTypes("authorization_code", "refresh_token",
                         "password", "implicit")
@@ -60,14 +67,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager);
+        endpoints.tokenStore(tokenStore())
+                .authenticationManager(authenticationManager)
+                .userDetailsService(cdpUserDetailService);
     }
 
     /**
      * 密码加密
-     */
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    }*/
 }

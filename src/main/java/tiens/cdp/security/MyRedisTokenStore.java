@@ -1,10 +1,12 @@
 package tiens.cdp.security;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
@@ -67,15 +69,15 @@ public class MyRedisTokenStore implements TokenStore {
     }
 
     private OAuth2AccessToken deserializeAccessToken(byte[] bytes) {
-        return (OAuth2AccessToken)this.serializationStrategy.deserialize(bytes, OAuth2AccessToken.class);
+        return (OAuth2AccessToken) this.serializationStrategy.deserialize(bytes, OAuth2AccessToken.class);
     }
 
     private OAuth2Authentication deserializeAuthentication(byte[] bytes) {
-        return (OAuth2Authentication)this.serializationStrategy.deserialize(bytes, OAuth2Authentication.class);
+        return (OAuth2Authentication) this.serializationStrategy.deserialize(bytes, OAuth2Authentication.class);
     }
 
     private OAuth2RefreshToken deserializeRefreshToken(byte[] bytes) {
-        return (OAuth2RefreshToken)this.serializationStrategy.deserialize(bytes, OAuth2RefreshToken.class);
+        return (OAuth2RefreshToken) this.serializationStrategy.deserialize(bytes, OAuth2RefreshToken.class);
     }
 
     private byte[] serialize(String string) {
@@ -195,7 +197,7 @@ public class MyRedisTokenStore implements TokenStore {
     }
 
     private static String getApprovalKey(OAuth2Authentication authentication) {
-        String userName = authentication.getUserAuthentication() == null ? "": authentication.getUserAuthentication().getName();
+        String userName = authentication.getUserAuthentication() == null ? "" : authentication.getUserAuthentication().getName();
         return getApprovalKey(authentication.getOAuth2Request().getClientId(), userName);
     }
 
@@ -357,14 +359,14 @@ public class MyRedisTokenStore implements TokenStore {
             conn.close();
         }
         if (byteList == null || byteList.size() == 0) {
-            return Collections.<OAuth2AccessToken> emptySet();
+            return Collections.<OAuth2AccessToken>emptySet();
         }
         List<OAuth2AccessToken> accessTokens = new ArrayList<OAuth2AccessToken>(byteList.size());
         for (byte[] bytes : byteList) {
             OAuth2AccessToken accessToken = deserializeAccessToken(bytes);
             accessTokens.add(accessToken);
         }
-        return Collections.<OAuth2AccessToken> unmodifiableCollection(accessTokens);
+        return Collections.<OAuth2AccessToken>unmodifiableCollection(accessTokens);
     }
 
     @Override
@@ -378,13 +380,13 @@ public class MyRedisTokenStore implements TokenStore {
             conn.close();
         }
         if (byteList == null || byteList.size() == 0) {
-            return Collections.<OAuth2AccessToken> emptySet();
+            return Collections.<OAuth2AccessToken>emptySet();
         }
         List<OAuth2AccessToken> accessTokens = new ArrayList<OAuth2AccessToken>(byteList.size());
         for (byte[] bytes : byteList) {
             OAuth2AccessToken accessToken = deserializeAccessToken(bytes);
             accessTokens.add(accessToken);
         }
-        return Collections.<OAuth2AccessToken> unmodifiableCollection(accessTokens);
+        return Collections.<OAuth2AccessToken>unmodifiableCollection(accessTokens);
     }
 }

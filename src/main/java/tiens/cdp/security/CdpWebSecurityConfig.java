@@ -25,14 +25,12 @@ import java.util.Objects;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class CdpWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private CdpUserDetailService userDetailService;
     private final CdpUserDetailService userDetailService;
 
     @Autowired
-    public SecurityConfig(CdpUserDetailService userDetailService){
+    public CdpWebSecurityConfig(CdpUserDetailService userDetailService){
         this.userDetailService = userDetailService;
     }
 
@@ -56,13 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        auth.inMemoryAuthentication().passwordEncoder(encoder)
-//                .withUser("admin")
-//                .password(encoder.encode("admin")).roles("USER1");
-
-        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
     }
 

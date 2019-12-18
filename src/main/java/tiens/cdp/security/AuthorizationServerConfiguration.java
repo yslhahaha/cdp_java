@@ -30,17 +30,25 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     /**
      * 注入权限验证控制器 来支持 password grant type
      */
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private RedisConnectionFactory redisConnectionFactory;
 
-    @Autowired
     private CdpUserDetailService cdpUserDetailService;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public AuthorizationServerConfiguration(AuthenticationManager authenticationManager
+            , RedisConnectionFactory redisConnectionFactory
+            , CdpUserDetailService cdpUserDetailService
+            , PasswordEncoder passwordEncoder
+    ) {
+        this.authenticationManager = authenticationManager;
+        this.redisConnectionFactory = redisConnectionFactory;
+        this.cdpUserDetailService = cdpUserDetailService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Bean
     public TokenStore tokenStore() {
@@ -58,11 +66,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient("tonr").secret(passwordEncoder.encode("secret"))
+        clients.inMemory()
+                .withClient("tonr")
+                .secret(passwordEncoder.encode("secret"))
                 .autoApprove(true)   //test
-                .authorizedGrantTypes("authorization_code", "refresh_token",
-                        "password", "implicit")
-                .scopes("read","write","del","userinfo");
+                .authorizedGrantTypes("authorization_code", "refresh_token", "password", "implicit")
+                .scopes("read", "write", "del", "userinfo");
     }
 
     @Override
@@ -71,12 +80,4 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authenticationManager(authenticationManager)
                 .userDetailsService(cdpUserDetailService);
     }
-
-    /**
-     * 密码加密
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }*/
 }

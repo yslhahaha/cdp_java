@@ -19,8 +19,12 @@ import java.time.Duration;
 @Configuration
 public class RedisConfiguration extends CachingConfigurerSupport {
 
-    @Autowired
     private RedisConnectionFactory redisConnectionFactory;
+
+    @Autowired
+    public RedisConfiguration(RedisConnectionFactory redisConnectionFactory) {
+        this.redisConnectionFactory = redisConnectionFactory;
+    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {

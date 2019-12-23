@@ -1,6 +1,12 @@
 server:
   port: 8989
 spring:
+  data:
+    redis:
+      repositories:
+        #解决 Multiple Spring Data modules found,
+        #    entering strict repository configuration
+        enabled: false
   redis:
     host: 127.0.0.1
     port: 6379
@@ -17,10 +23,54 @@ spring:
         min-idle: 0
   # datasource
   datasource:
-    driver-class-name: oracle.jdbc.driver.OracleDriver # JDBC连接Mysql6以上com.mysql.cj.jdbc.Driver
+    driver-class-name: oracle.jdbc.OracleDriver # JDBC连接Mysql6以上com.mysql.cj.jdbc.Driver
     url: jdbc:oracle:thin:@localhost:1521/orcl.1.186.138
     username: dpsuser
     password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5      #初始化连接个数
+      max-active: 20       #最大连接个数
+      min-idle: 5          #最小连接个数
+      max-wait: 6000       #最大等待时间
+      pool-prepared-statements: true                        #开启缓存PSCache
+      max-pool-prepared-statement-per-connection-size: 20   #指定每个连接上PSCache的大小
+      time-between-eviction-runs-millis: 6000               #在空闲连接回收器线程运行期间休眠的时间值
+      min-evictable-idle-time-millis: 100000                # 配置一个连接在池中最小生存的时间
+      validation-query: SELECT 1 FROM DUAL                  #用来检测连接是否有效的sql
+      validation-query-timeout: 60000                       #检查sql超时时间
+      test-while-idle: true     #申请连接的时候检测
+      test-on-borrow: false     #申请连接时执行validationQuery检测连接是否有效
+      test-on-return: false     #归还连接时执行validationQuery检测连接是否有效
+      filters: stat,wall
+      #开启StatFilter
+      stat:
+        enabled: true
+        log-slow-sql: true
+        slow-sql-millis: 1000
+      #开启WallFilter
+      wall:
+        enabled: true
+        log-violation: true
+        throw-exception: false
+        config:
+          delete-where-none-check: true
+      #开启Web监控
+      web-stat:
+        enabled: true
+      #开启Aop监控
+      aop-stat:
+        enabled: true
+      #开启监控页面
+      stat-view-servlet:
+        url-pattern: /druid/*
+        enabled: true
+        login-username: admin
+        login-password: 111111
+      web-stat-filter:
+        url-pattern: /*
+        enabled: true
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
 #mybatis
 mybatis:
   # 映射文件的路径 ，支持 Ant 风格的通配符， 多个配置可以使用英文逗号隔开

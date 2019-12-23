@@ -39,7 +39,6 @@ public class CdpAccessDecisionManager implements AccessDecisionManager {
             }
             throw new AccessDeniedException("当前访问没有权限");
         }
-
     }
 
     /**

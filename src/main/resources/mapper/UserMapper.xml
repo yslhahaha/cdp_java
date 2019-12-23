@@ -3,22 +3,23 @@
 
 <!-- 当Mapper接口和XML文件关联的时候， namespace的值就需要配置成接口的全限定名称 -->
 <mapper namespace="tiens.cdp.dao.UserMapper">
-
-    <resultMap id="UserResultMap" type="tiens.cdp.model.LoginUser" >
-        <result column="USER_ID" property="userid" jdbcType="VARCHAR" />
-        <result column="USER_NAME" property="username" jdbcType="VARCHAR" />
-        <result column="CN_NAME" property="cName" jdbcType="VARCHAR" />
-        <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <!--在application.yml里配置了type-aliases-package，省略tiens.cdp.model.-->
+    <resultMap id="UserResultMap" type="LoginUser">
+        <result column="USER_ID" property="userid" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="username" jdbcType="VARCHAR"/>
+        <result column="CN_NAME" property="cName" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="ApiUrlResultMap" type="tiens.cdp.model.ApiUrl" >
-        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
-        <result column="API_ID" property="apiId" jdbcType="VARCHAR" />
-        <result column="API_NAME" property="apiName" jdbcType="VARCHAR" />
-        <result column="API_PATH" property="apiUrl" jdbcType="VARCHAR" />
+    <resultMap id="ApiUrlResultMap" type="ApiUrl">
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR"/>
+        <result column="API_ID" property="apiId" jdbcType="VARCHAR"/>
+        <result column="API_NAME" property="apiName" jdbcType="VARCHAR"/>
+        <result column="API_PATH" property="apiUrl" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="findByUsername" resultMap="UserResultMap" parameterType="java.lang.String"> <!--   resultType可以不用写全，与application.yml中的type-aliases-package属性组合使用 -->
+    <select id="findByUsername" resultMap="UserResultMap"
+            parameterType="java.lang.String"> <!--   resultType可以不用写全，与application.yml中的type-aliases-package属性组合使用 -->
         SELECT L.USER_ID, L.USER_NAME, L.CN_NAME, L.PASSWORD FROM T_USERS L
         WHERE L.USER_NAME = #{userName,jdbcType=VARCHAR}
     </select>

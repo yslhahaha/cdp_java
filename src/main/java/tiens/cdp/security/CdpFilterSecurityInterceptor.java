@@ -20,27 +20,34 @@ import java.io.IOException;
 
 @Service
 public class CdpFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
-    @Autowired
+
     private FilterInvocationSecurityMetadataSource securityMetadataSource;
+
+    @Autowired
+    public CdpFilterSecurityInterceptor(FilterInvocationSecurityMetadataSource securityMetadataSource) {
+        this.securityMetadataSource = securityMetadataSource;
+    }
 
     @Autowired
     public void setMyAccessDecisionManager(CdpAccessDecisionManager myAccessDecisionManager) {
         super.setAccessDecisionManager(myAccessDecisionManager);
     }
 
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+//        FilterInvocation fi = new FilterInvocation(servletRequest, servletResponse, filterChain);
+//        HttpServletResponse response = (HttpServletResponse)servletResponse;
+//        HttpServletRequest request = (HttpServletRequest)servletRequest;
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+//        response.setHeader("Access-Control-Allow-Headers", ":x-requested-with,content-type");
+//        filterChain.doFilter(servletRequest,servletResponse);
+//        if (!request.getRequestURI().equals("/oauth/token") && !request.getRequestURI().equals("/druid/")) {
+//            invoke(fi);
+//        }
+
         FilterInvocation fi = new FilterInvocation(servletRequest, servletResponse, filterChain);
-        HttpServletResponse response = (HttpServletResponse)servletResponse;
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Allow-Headers", ":x-requested-with,content-type");
-        filterChain.doFilter(servletRequest,servletResponse);
-        if (!request.getRequestURI().equals("/oauth/token")) {
-            invoke(fi);
-        }
+        invoke(fi);
     }
 
     public void invoke(FilterInvocation fi) throws IOException, ServletException {

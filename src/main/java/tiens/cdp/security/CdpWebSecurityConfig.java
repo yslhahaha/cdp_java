@@ -18,9 +18,11 @@ import org.springframework.security.oauth2.provider.approval.TokenStoreUserAppro
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.DigestUtils;
 import tiens.cdp.service.CdpUserDetailService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @Configuration
@@ -30,7 +32,7 @@ public class CdpWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CdpUserDetailService userDetailService;
 
     @Autowired
-    public CdpWebSecurityConfig(CdpUserDetailService userDetailService){
+    public CdpWebSecurityConfig(CdpUserDetailService userDetailService) {
         this.userDetailService = userDetailService;
     }
 
@@ -43,12 +45,7 @@ public class CdpWebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/login").permitAll()
-//                .antMatchers("/hq").hasRole("USER1")
-//                .anyRequest()
-//                .authenticated();
+
     }
 
     @Override
@@ -73,7 +70,7 @@ public class CdpWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             @Override
             public boolean matches(CharSequence charSequence, String s) {
-                return Objects.equals(charSequence.toString(),s);
+                return Objects.equals(charSequence.toString(), s);
             }
         };
     }

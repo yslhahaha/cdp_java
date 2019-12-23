@@ -2,6 +2,7 @@ package tiens.cdp.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tiens.cdp.dao.UserMapper;
 import tiens.cdp.model.ApiUrl;
 import tiens.cdp.model.LoginUser;
@@ -10,6 +11,7 @@ import tiens.cdp.service.IUserService;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements IUserService {
 
 

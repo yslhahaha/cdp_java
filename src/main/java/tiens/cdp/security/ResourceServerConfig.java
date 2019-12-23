@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 资源服务器配置
@@ -26,7 +29,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/valcode").permitAll()
-                //.antMatchers("/hq").hasRole("8DF13C69CC3DD59CE050A8C0AB02A3AB")
+                .antMatchers("/druid/**").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
                 .anyRequest()
                 .authenticated();
     }
